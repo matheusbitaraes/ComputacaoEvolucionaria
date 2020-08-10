@@ -1,26 +1,22 @@
 % definições gerais
-num_exec = 200; %numero de execuções para cada disposição de parametros
+num_exec = 1; %numero de execuções para cada disposição de parametros
 dim = 8; % dimensão do tabuleiro (dim x dim)
-should_plot = false;
+should_plot = true;
 n_generations = 1000; % numero de gerações
-
 Ns = [20, 50, 100, 200, 500]; % tamanhos da população a serem testados
-inclinations = [1, 1.5, 2]; % inclinações da reta para seleção por ranking linear
 mutation_percs = [0.1, 0.05]; % porcentagens de chance de mutação
 crossover_percs = [0.5, 0.7, 0.9];% probabilidade de crossover
 
-% Ns = 50; % tamanhos da população a serem testados
+Ns = 50; % tamanhos da população a serem testados
 % parent_percs = 0.3; % porcentagens de pais selecionados para cruzamento a serem testadas
-% mutation_percs = 0.05; % porcentagens de chance de mutação
-% crossover_percs = 0.7;% probabilidade de crossover
+mutation_percs = 0.05; % porcentagens de chance de mutação
+crossover_percs = 0.7;% probabilidade de crossover
 
 % iteracoes para as possiveis solucoes
 for idn = 1: length(Ns)
-    for idp = 1: length(inclinations)
-        for idc = 1: length(crossover_percs)
-            for idm = 1: length(mutation_percs)
+    for idc = 1: length(crossover_percs)
+        for idm = 1: length(mutation_percs)
             N = Ns(idn);
-            s = inclinations(idp);
             mutation_perc = mutation_percs(idm);
             crossover_perc = crossover_percs(idc);
             
@@ -42,22 +38,16 @@ for idn = 1: length(Ns)
                 
                 for i = 1:n_generations
                     
-                    % selecão dos pais por Ranking linear
                     sorted_population = sortrows(population, dim + 1);
-                    num_parents = round(N * parent_perc);
-                    Plin() = (2-s)/mu + 2*i(s) 
                     
-                    % adiciona mais um pai, caso o numero seja impar
-                    if(mod(num_parents,2) ~= 0)
-                        num_parents = num_parents + 1; 
-                    end 
-                    
-                    selected_parents = sorted_population(1:num_parents, :);
-                    parents_matching = randperm(num_parents); % define de forma aleatoria os indices que serão usados para o cruzamento dos pais
-                    
-                    % cruzamento
-                    children = zeros (num_parents, dim + 1); % alocando memoria para os filhos
-                    for j = 1:2:num_parents-1
+                    % selecão dos pais e cruzamento
+                    children = zeros (N, dim + 1); % alocando memoria para os filhos
+                    for j = 1:2:N-1
+                        
+                        % seleção dos pais: seleciona os 2 melhores pais
+                        % dentre uma selecão aleatoria de individuos
+                        random_individuals = sortrows(population(randperm(N),:), dim + 1);
+                        selected_parents = random_individuals(1:2);
                         
                          % realiza o cruzamento de acordo com a probabilidade estipulada
                         if(rand() > crossover_perc)
@@ -83,7 +73,8 @@ for idn = 1: length(Ns)
                     
                     % calculo de fitness para os filhos
                     for k = 1:size(children, 1)
-                        children(k, dim + 1) = fitness_nq(children(k, 1:dim)); % calculando os novos fitness
+                        children(k, dim + 1) =...
+                            fitness_nq(children(k, 1:dim)); % calculando os novos fitness
                     end
                     
                     % integra filhos à população e ordena por fitness
@@ -129,11 +120,10 @@ for idn = 1: length(Ns)
             end
             
             %             informação sobre a execucao
-            filename = sprintf('execution_log_generations-%d_popsize-%d_parent-perc%.2f_mutationperc-%.2f_crossover_perc%.2f_iterations-%d.csv',...
-                n_generations, N,parent_perc, mutation_perc, crossover_perc, num_exec);
+            filename = sprintf('execution_log_generations-%d_popsize-%d_parent-perc%.2f_mutationperc-%.2f_iterations-%d.csv',...
+                n_generations, N,parent_perc, mutation_perc, num_exec);
             csvwrite(filename, execution_log)
             
-            end
         end
     end
 end

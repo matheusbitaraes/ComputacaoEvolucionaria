@@ -24,7 +24,6 @@ for i = 1:num_files
     exec_config = strrep(exec_config,'_parent-perc',', par. %: ');
     exec_config = strrep(exec_config,'_mutationperc-',', mut. %: ');
     exec_config = strrep(exec_config,'_crossover_perc-',', cross. %: ');
-    results_cell{i,3} = exec_config;
     results_cell{i,4} = best_solutions;
     results_cell{i,5} = num_generations;
     
@@ -43,7 +42,7 @@ for i = 1:num_files
     end
     
     % plotting
-    scatter(mean(num_generations), mean(best_solutions),'filled'); % media de gerações e melhores soluções
+    scatter(mean(num_generations), mean(best_solutions), color,'filled'); % media de gerações e melhores soluções
     hold on
 end
 
@@ -57,13 +56,9 @@ title('Todas as disposições testadas')
 figure()
 for i = 1:size(plot_by_populations,3)
      % plotting
-    scatter(plot_by_populations(:, 1, i), plot_by_populations(:, 2, i),'filled'); % media de gerações e melhores soluções
+    scatter(plot_by_populations,'filled'); % media de gerações e melhores soluções
     hold on
 end
-xlabel('Média do número de gerações');
-ylabel('Media do melhor fitness');
-legend('População: 20', 'População: 50', 'População: 100', 'População: 200')
-title('Disposições testadas por população')
 
 sorted_results = sortrows(results_cell, [1 2]);
 num_results = 10;
