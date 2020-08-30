@@ -3,10 +3,18 @@ num_exec = 200; %numero de execuções para cada disposição de parametros
 dim = 8; % dimensão do tabuleiro (dim x dim)
 should_plot = false;
 n_generations = 1000; % numero de gerações
-Ns = [20, 50, 100, 200]; % tamanhos da população a serem testados
-parent_percs = [0.3, 0.2]; % porcentagens de individuos aleatorios selecionados para selecao de pais
-mutation_percs = [0.1, 0.05]; % porcentagens de chance de mutação
-crossover_percs = [0.5, 0.7, 0.9];% probabilidade de crossover
+
+% descomentar para multiplas execuções
+% Ns = [20, 50, 100, 200]; % tamanhos da população a serem testados
+% parent_percs = [0.3, 0.2]; % porcentagens de individuos aleatorios selecionados para selecao de pais
+% mutation_percs = [0.1, 0.05]; % porcentagens de chance de mutação
+% crossover_percs = [0.5, 0.7, 0.9];% probabilidade de crossover
+
+
+Ns = [200]; % tamanhos da população a serem testados
+parent_percs = [0.3]; % porcentagens de individuos aleatorios selecionados para selecao de pais
+mutation_percs = [0.05]; % porcentagens de chance de mutação
+crossover_percs = [0.7];% probabilidade de crossover
 
 % iteracoes para as possiveis solucoes
 for idn = 1: length(Ns)
@@ -127,12 +135,3 @@ for idn = 1: length(Ns)
         end    
     end
 end
-
-% conclusoes e observacoes
-% - aumentar a populacao funciona muito mais do que aumentar o numero de
-% geracoes
-
-% plotar melhor solução
-
-% rodar o algoritmo algumas vezes e pegar a média de gerações que ele
-% demora para resolver
